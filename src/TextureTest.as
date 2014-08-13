@@ -1,13 +1,14 @@
 package
 {
+	import com.adobe.utils.PerspectiveMatrix3D;
 	import com.adobe.utils.extended.AGALMiniAssembler;
 	
 	import flash.display.Bitmap;
-	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.display.Stage3D;
 	import flash.display3D.Context3D;
 	import flash.display3D.Context3DProfile;
+	import flash.display3D.Context3DProgramType;
 	import flash.display3D.Context3DRenderMode;
 	import flash.display3D.Context3DTextureFormat;
 	import flash.display3D.Context3DVertexBufferFormat;
@@ -17,12 +18,18 @@ package
 	import flash.display3D.textures.Texture;
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
+	import flash.geom.Matrix3D;
+	import flash.geom.Vector3D;
 	
 	[SWF(backgroundColor="#333333", frameRate="60", width="800", height="600")]
 	public class TextureTest extends Sprite
 	{
 		private var _context3d:Context3D;
 		private var _stage3d:Stage3D;
+		private var _modelMatrix:Matrix3D = new Matrix3D();
+		private var _projectionmatrix:PerspectiveMatrix3D;
+		private var _cameraMatrix:Matrix3D;
+		private var _viewMatrix:Matrix3D;
 		
 		private var _vertexBuffer:VertexBuffer3D;
 		private var _indexBuffer:IndexBuffer3D;
@@ -31,7 +38,7 @@ package
 		
 		private var _texture:Texture;
 		
-		[Embed(source="./assets/floor_diffuse.jpg")]
+		[Embed(source="../assets/floor_diffuse.jpg")]
 		private static var TextureClass:Class;
 		
 		public function TextureTest()
@@ -62,8 +69,31 @@ package
 			addEventListener(Event.ENTER_FRAME, render);
 		}
 		
+		private var _t:Number = 0;
+		private var _speed:Number = .02;
+		private var _degrees:Number = 0;
 		private function render(event:Event):void
 		{
+			if(_t > .5) _speed = -.02;
+			if(_t < -.5) _speed = .02; 
+			
+			_t += _speed;
+			_degrees += 2.0;
+			_modelMatrix.identity();
+//			_modelMatrix.appendTranslation(_t, 0, 1);
+			_modelMatrix.appendRotation(_degrees*1.0, Vector3D.Y_AXIS);
+			
+			_cameraMatrix.identity();
+			_cameraMatrix.appendTranslation(0, 0, -5);
+			_cameraMatrix.appendRotation(_degrees, Vector3D.Z_AXIS);
+			
+			_viewMatrix.identity();
+			_viewMatrix.append(_modelMatrix);
+			_viewMatrix.append(_cameraMatrix);
+			_viewMatrix.append(_projectionmatrix);
+			
+			_context3d.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, _viewMatrix, true);
+			
 			_context3d.clear(0, 0, 0);
 			_context3d.drawTriangles(_indexBuffer);
 			_context3d.present();
@@ -80,6 +110,15 @@ package
 			_stage3d.x = 50;
 			_stage3d.y = 50;
 			_context3d.configureBackBuffer(700, 500, 2);
+			
+			_projectionmatrix = new PerspectiveMatrix3D();
+			// 45 degrees FOV, 700/500 aspect ratio, 0.1=near, 100=far
+			_projectionmatrix.perspectiveFieldOfViewRH(45.0, 700 / 500, 0.01, 100.0);
+			
+			_cameraMatrix = new Matrix3D();
+			_cameraMatrix.appendTranslation(0, 0, -5);
+			
+			_viewMatrix = new Matrix3D();
 		}
 		
 		private function initBuffer():void
@@ -111,7 +150,7 @@ package
 		
 		private function initProgram():void
 		{
-			var vertexSrc:String = "mov op, va0\n" +
+			var vertexSrc:String = "m44 op, va0, vc0\n" +
 				"mov v0, va1\n";
 			var fragmentsrc:String = "tex ft0, v0, fs0 <2d, repeat, linear, nomip>\n" +
 				"mov oc ft0\n";

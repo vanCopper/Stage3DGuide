@@ -6,6 +6,7 @@ package
 	import flash.display.Stage3D;
 	import flash.display3D.Context3D;
 	import flash.display3D.Context3DProfile;
+	import flash.display3D.Context3DProgramType;
 	import flash.display3D.Context3DRenderMode;
 	import flash.display3D.Context3DVertexBufferFormat;
 	import flash.display3D.IndexBuffer3D;
@@ -13,6 +14,7 @@ package
 	import flash.display3D.VertexBuffer3D;
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
+	import flash.geom.Matrix3D;
 	
 	[SWF(backgroundColor="#333333", frameRate="60", width="800", height="600")]
 	public class HelloTriangle extends Sprite
@@ -54,12 +56,13 @@ package
 		
 		private function render(event:Event):void
 		{
+			var modelMatrix:Matrix3D = new Matrix3D();
+			modelMatrix.appendTranslation(0, 1, 0);
+			//			_modelMatrix.position = new Vector3D(1, 0, 0);
+			//			_modelMatrix.appendRotation(t*1.0, Vector3D.Z_AXIS);
+			_context3d.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, modelMatrix)
 			_context3d.clear(0, 0, 0);
-			_context3d.setVertexBufferAt(0, _vertexBuffer, 0, 
-				Context3DVertexBufferFormat.FLOAT_3);
-			_context3d.setVertexBufferAt(1, _vertexBuffer, 3, 
-				Context3DVertexBufferFormat.FLOAT_3);
-			_context3d.setProgram(_program3d);
+			
 			_context3d.drawTriangles(_indexBuffer);
 			_context3d.present();
 		}
@@ -98,11 +101,16 @@ package
 		
 		private function initProgram():void
 		{
-			var vertexSrc:String = "mov op, va0\n" +
+			var vertexSrc:String = "m44 op, va0, vc0\n" +
 				"mov v0, va1\n";
 			var fragmentsrc:String = "mov oc, v0\n";
 			var shaderAssembler:AGALMiniAssembler = new AGALMiniAssembler();
 			_program3d = shaderAssembler.assemble2(_context3d, 2, vertexSrc, fragmentsrc);
+			_context3d.setVertexBufferAt(0, _vertexBuffer, 0, 
+				Context3DVertexBufferFormat.FLOAT_3);
+			_context3d.setVertexBufferAt(1, _vertexBuffer, 3, 
+				Context3DVertexBufferFormat.FLOAT_3);
+			_context3d.setProgram(_program3d);
 		}
 			
 	}
