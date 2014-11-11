@@ -104,12 +104,15 @@ package
 			var vertexSrc:String = "m44 op, va0, vc0\n" +
 				"mov v0, va1\n";
 			var fragmentsrc:String = "mov oc, v0\n";
+			
 			var shaderAssembler:AGALMiniAssembler = new AGALMiniAssembler();
 			_program3d = shaderAssembler.assemble2(_context3d, 2, vertexSrc, fragmentsrc);
+			
 			_context3d.setVertexBufferAt(0, _vertexBuffer, 0, 
 				Context3DVertexBufferFormat.FLOAT_3);
 			_context3d.setVertexBufferAt(1, _vertexBuffer, 3, 
 				Context3DVertexBufferFormat.FLOAT_3);
+			
 			_context3d.setProgram(_program3d);
 		}
 			
