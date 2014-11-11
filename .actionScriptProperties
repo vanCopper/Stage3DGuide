@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<actionScriptProperties analytics="false" mainApplicationPath="LightTest.as" projectUUID="82941068-d84f-45d0-80f4-bed7ca52e1e5" version="11">
+<actionScriptProperties analytics="false" mainApplicationPath="Context3D_drawToBitmapData.as" projectUUID="82941068-d84f-45d0-80f4-bed7ca52e1e5" version="11">
   <compiler additionalCompilerArguments="-locale en_US&#10;-swf-version=25" advancedTelemetry="true" autoRSLOrdering="true" copyDependentFiles="true" fteInMXComponents="false" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="false" htmlHistoryManagement="true" htmlPlayerVersionCheck="true" includeNetmonSwc="false" outputFolderPath="bin-debug" removeUnusedRSL="true" sourceFolderPath="src" strict="true" targetPlayerVersion="11.4.0" useApolloConfig="false" useDebugRSLSwfs="true" useFlashSDK="true" verifyDigests="true" warn="true">
     <compilerSourcePath/>
     <libraryPath defaultLinkType="0">
@@ -32,6 +32,8 @@
     <sourceAttachmentPath/>
   </compiler>
   <applications>
+    <application path="Context3D_drawToBitmapData.as"/>
+    <application path="Context3D_Stencil.as"/>
     <application path="LightTest.as"/>
     <application path="ALightTest.as"/>
     <application path="HelloTriangle.as"/>
