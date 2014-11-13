@@ -95,8 +95,8 @@ package com
 		{
 			Stage3DProxy.instance.context3d.clear();
 			//暂时用scene3d.nodes来代替rootNode 实际上应该是筛选过的一个rendNode列表
-			Stage3DProxy.instance.vm = camera3D.lookAtRH();
-			Stage3DProxy.instance.pm = camera3D.projectionmatrix;
+			Stage3DProxy.instance.vm = camera3D.viewMatrix
+			Stage3DProxy.instance.pm = camera3D.projectionMatrix;
 			Stage3DProxy.instance.render(scene3D);
 			Stage3DProxy.instance.context3d.present();
 		}

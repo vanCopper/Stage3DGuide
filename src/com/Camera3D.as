@@ -17,98 +17,145 @@ package com
 		public var minDistance:Number = 6;
 		public var maxDistance:Number = 25;
 		
-		private var _pitchAngle:Number = 45;
+		private var _transformationMatrix:Matrix3D = new Matrix3D();
 		
-		public var eyePos:Vector3D = new Vector3D();
+		/**
+		 * 相机位置 
+		 */		
+		public var camPos:Vector3D = new Vector3D();
+		/**
+		 * 相机目标点 
+		 */		
 		public var camTarget:Vector3D = new Vector3D();
-		public var camUp:Vector3D = Vector3D.Z_AXIS;
-		public var camRight:Vector3D = Vector3D.X_AXIS;
-		public var camForward:Vector3D = Vector3D.Y_AXIS;
-		public var projectionmatrix:PerspectiveMatrix3D = new PerspectiveMatrix3D()
 		
-		private static var _x:Vector3D = new Vector3D();
-		private static var _y:Vector3D = new Vector3D();
-		private static var _z:Vector3D = new Vector3D();
-		private static var _w:Vector3D = new Vector3D();
+		public var camUp:Vector3D = Vector3D.Y_AXIS;
+		public var camRight:Vector3D = Vector3D.X_AXIS;
+		public var camForward:Vector3D = Vector3D.Z_AXIS;
+		public var viewWidth:Number = 800;
+		public var viewHeight:Number = 600;
+		public var near:Number = 0.02;
+		public var far:Number = 100;
+		
+		
+		public var projectionMatrix:PerspectiveMatrix3D = new PerspectiveMatrix3D();
+		private var _viewMatrix:Matrix3D = new Matrix3D();	
+		
+		private static var XV:Vector3D = new Vector3D();
+		private static var YV:Vector3D = new Vector3D();
+		private static var ZV:Vector3D = new Vector3D();
+		private static var WV:Vector3D = new Vector3D();
 		
 		private var _needUpdate:Boolean = true;
 		
 		public function Camera3D()
 		{
 			// 45 degrees FOV, 700/500 aspect ratio, 0.1=near, 100=far
-			projectionmatrix.perspectiveFieldOfViewRH(Math.PI/4, 800 / 600, 0.01, 100.0);
+			projectionMatrix.perspectiveFieldOfViewRH(Math.PI/4, viewWidth / viewHeight, near, far);
 		}
 		
 		private function update():void
 		{
-			var matrix:Matrix3D = new Matrix3D();
-			matrix.appendRotation(-pitchAngle, camRight);
-			matrix.appendRotation(pitchAngle, camUp);
+			_transformationMatrix.identity();
+			_transformationMatrix.appendRotation(_xDegrees, Vector3D.X_AXIS);
+			_transformationMatrix.appendRotation(_yDegrees, Vector3D.Y_AXIS);
+			_transformationMatrix.appendRotation(_zDegrees, Vector3D.Z_AXIS);
 			
-			eyePos = matrix.transformVector(camForward);
-			eyePos.scaleBy(-distance);
-			eyePos = eyePos.add(camTarget);
+			var camRU:Vector3D = _transformationMatrix.transformVector(Vector3D.Y_AXIS);
+			camUp = new Vector3D().add(camRU);
+			
+			camPos = _transformationMatrix.transformVector(camForward);
+			camPos.scaleBy(-distance);
+			
+//			camPos = camPos.add(camTarget);
 		}
 		
-		public function updateView(viewWidth:Number, viewHeight:Number):void
+		private var _xDegrees:Number = 0;
+		private var _yDegrees:Number = 0;
+		private var _zDegrees:Number = 0;
+		public function rotaion(degrees:Number, axis:String):void
 		{
-			projectionmatrix.perspectiveFieldOfViewRH(45.0, viewWidth/viewHeight, 0.01, 100);	
+			axis = axis.toLowerCase();
+			switch(axis)
+			{
+				case "x":
+					_xDegrees += degrees;
+					break;
+				case "y":
+					_yDegrees += degrees;
+					break;
+				case "z":
+					_zDegrees += degrees;
+					break;
+			}
+			_needUpdate = true;
 		}
 		
-		public function lookAtRH():Matrix3D
+		public function updateView(w:Number, h:Number):void
+		{
+			viewWidth = w;
+			viewHeight = h;
+			
+			projectionMatrix.perspectiveFieldOfViewRH(Math.PI/4, viewWidth/viewHeight, near, far);	
+		}
+		
+		public function get viewMatrix():Matrix3D
 		{
 			if(_needUpdate)
 			{
 				update();
+				_viewMatrix = lookAtRH();
 				_needUpdate = false;
 			}
-			
+			return _viewMatrix;
+		}
+		
+		private function lookAtRH():Matrix3D
+		{
 			var vm:Matrix3D = new Matrix3D();
 			
-			_x = eyePos.subtract(camTarget);
-			_x.normalize();
+			XV = camPos.subtract(camTarget);
+			XV.normalize();
 			
-			_z.copyFrom(camUp);
-			crossProd(_z, _x);
-			_z.normalize();
+			ZV.copyFrom(camUp);
+			crossProd(ZV, XV);
+			ZV.normalize();
 			
-			_y.copyFrom(_x);
-			crossProd(_y, _z);
+			YV.copyFrom(XV);
+			crossProd(YV, ZV);
 			
 			var raw:Vector.<Number> = vm.rawData;
-			raw[0] = _z.x;
-			raw[1] = _y.x;
-			raw[2] = _x.x;
+			raw[0] = ZV.x;
+			raw[1] = YV.x;
+			raw[2] = XV.x;
 			raw[3] = 0.0;
 			
-			raw[4] = _z.y;
-			raw[5] = _y.y;
-			raw[6] = _x.y;
+			raw[4] = ZV.y;
+			raw[5] = YV.y;
+			raw[6] = XV.y;
 			raw[7] = 0.0;
 			
-			raw[8] = _z.z;
-			raw[9] = _y.z;
-			raw[10] = _x.z;
+			raw[8] = ZV.z;
+			raw[9] = YV.z;
+			raw[10] = XV.z;
 			raw[11] = 0.0;
 			
-			raw[12] = - _z.dotProduct(eyePos);
-			raw[13] = -_y.dotProduct(eyePos);
-			raw[14] = -_x.dotProduct(eyePos);
+			raw[12] = - ZV.dotProduct(camPos);
+			raw[13] = -YV.dotProduct(camPos);
+			raw[14] = -XV.dotProduct(camPos);
 			raw[15] = 1.0;
 			
 			vm.copyRawDataFrom(raw);
-			
 			
 			return vm;
 		}
 		
 		private function crossProd(a:Vector3D, b:Vector3D):void
 		{
-			_w.x = a.y * b.z - a.z * b.y;
-			_w.y = a.z * b.x - a.x * b.z;
-			_w.z = a.x * b.y - a.y * b.x;
-			_w.w = 1.0;
-			a.copyFrom(_w);
+			WV.x = a.y * b.z - a.z * b.y;
+			WV.y = a.z * b.x - a.x * b.z;
+			WV.z = a.x * b.y - a.y * b.x;
+			WV.w = 1.0;
+			a.copyFrom(WV);
 		}
 
 		public function get distance():Number
@@ -121,18 +168,5 @@ package com
 			_distance = value;
 			_needUpdate = true;
 		}
-
-		public function get pitchAngle():Number
-		{
-			return _pitchAngle;
-		}
-
-		public function set pitchAngle(value:Number):void
-		{
-			_pitchAngle = value;
-			_needUpdate = true;
-		}
-
-		
 	}
 }

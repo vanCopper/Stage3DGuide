@@ -12,6 +12,9 @@ package
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
+	import flash.events.KeyboardEvent;
+	import flash.geom.Vector3D;
+	import flash.ui.Keyboard;
 
 	[SWF(width='800',height='600',backgroundColor='0x333333',frameRate="60")]
 	public class Stage3DGuide extends Sprite
@@ -32,6 +35,31 @@ package
 			this.stage.scaleMode = StageScaleMode.NO_SCALE;
 			this.stage.align = StageAlign.TOP_LEFT;
 			this.stage.addEventListener(Event.RESIZE, onResize);
+			this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onkeyDown);
+		}
+		
+		private var _gl:Number = 15;
+		private function onkeyDown(e:KeyboardEvent):void
+		{
+			switch(e.keyCode)
+			{
+				case Keyboard.X:
+					_view3d.camera3D.rotaion(_gl, "x");
+					break;
+				case Keyboard.Y:
+					_view3d.camera3D.rotaion(_gl, "y");
+					break;
+				case Keyboard.Z:
+					_view3d.camera3D.rotaion(_gl, "z");
+					break;
+				case Keyboard.W:
+					_view3d.camera3D.distance -= 1;
+					break;
+				case Keyboard.S:
+					_view3d.camera3D.distance += 1;
+					break;
+			}
+			
 		}
 		
 		private function init():void
@@ -52,7 +80,7 @@ package
 			mat.bitmapData = (new TextureClass() as Bitmap).bitmapData;
 			
 			var meshNode:MeshNode = new MeshNode(pGeo, mat, new DefaultShader);
-//			meshNode.x = -5;
+//			meshNode.z = 15;
 			
 			_view3d.scene3D.addChild(meshNode);
 		}
