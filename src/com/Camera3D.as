@@ -23,18 +23,15 @@ package com
 		 * 相机位置 
 		 */		
 		public var camPos:Vector3D = new Vector3D();
-		/**
-		 * 相机目标点 
-		 */		
-		public var camTarget:Vector3D = new Vector3D();
+		private var _camTarget:Vector3D = new Vector3D();
 		
 		public var camUp:Vector3D = Vector3D.Y_AXIS;
 		public var camRight:Vector3D = Vector3D.X_AXIS;
 		public var camForward:Vector3D = Vector3D.Z_AXIS;
 		public var viewWidth:Number = 800;
 		public var viewHeight:Number = 600;
-		public var near:Number = 0.02;
-		public var far:Number = 100;
+		public var near:Number = 0.002;
+		public var far:Number = 1000;
 		
 		
 		public var projectionMatrix:PerspectiveMatrix3D = new PerspectiveMatrix3D();
@@ -65,8 +62,7 @@ package com
 			
 			camPos = _transformationMatrix.transformVector(camForward);
 			camPos.scaleBy(-distance);
-			
-//			camPos = camPos.add(camTarget);
+			camPos = camPos.add(camTarget);
 		}
 		
 		private var _xDegrees:Number = 0;
@@ -168,5 +164,24 @@ package com
 			_distance = value;
 			_needUpdate = true;
 		}
+
+		/**
+		 * 相机目标点 
+		 */
+		public function get camTarget():Vector3D
+		{
+			return _camTarget;
+		}
+
+		/**
+		 * @private
+		 */
+		public function set camTarget(value:Vector3D):void
+		{
+			_needUpdate = true;
+			_camTarget = value;
+			
+		}
+
 	}
 }

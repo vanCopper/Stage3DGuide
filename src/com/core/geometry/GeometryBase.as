@@ -107,6 +107,12 @@ package com.core.geometry
 			return _indexBuffer;
 		}
 		
+		public function get rawData():Vector.<Number>
+		{
+			updateRaw();
+			return _raws;
+		}
+		
 		public function get triangleNum():uint
 		{
 			return _indexes.length / 3;

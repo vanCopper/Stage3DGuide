@@ -67,12 +67,12 @@ package com
 			if(stage3d)
 			{
 				Stage3DProxy.instance.init(stage3d, _profile);
-				if(this.hasEventListener(Event.ENTER_FRAME))
-					this.removeEventListener(Event.ENTER_FRAME, onEnter);
-				this.addEventListener(Event.ENTER_FRAME, onEnter);
+//				if(this.hasEventListener(Event.ENTER_FRAME))
+//					this.removeEventListener(Event.ENTER_FRAME, onEnter);
+//				this.addEventListener(Event.ENTER_FRAME, onEnter);
 			}
 		}	
-		
+		/*
 		private function onEnter(e:Event):void
 		{
 			if(_needUpdateBackBuffer)
@@ -89,16 +89,34 @@ package com
 			}
 			
 			render();
+		}*/
+		
+		public function configBackBuffer():void
+		{
+			if(!Stage3DProxy.instance.stage3d)return;
+			if(_needUpdateBackBuffer)
+			{
+				updateBackBuffer();
+				_needUpdateBackBuffer = false;
+			}
+			
+			if(_needUpdatePostion)
+			{
+				Stage3DProxy.instance.stage3d.x = this.x;
+				Stage3DProxy.instance.stage3d.y = this.y;
+				_needUpdatePostion = false;
+			}
 		}
 		
-		private function render():void
+		public function render():void
 		{
-			Stage3DProxy.instance.context3d.clear();
+			
 			//暂时用scene3d.nodes来代替rootNode 实际上应该是筛选过的一个rendNode列表
 			Stage3DProxy.instance.vm = camera3D.viewMatrix
 			Stage3DProxy.instance.pm = camera3D.projectionMatrix;
 			Stage3DProxy.instance.render(scene3D);
 			Stage3DProxy.instance.context3d.present();
+			
 		}
 		
 		private function updateBackBuffer():void

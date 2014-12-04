@@ -40,6 +40,10 @@ package com.core.entities
 			
 			Stage3DProxy.instance.wm = modelMatrix;
 			Stage3DProxy.instance.context3d.drawTriangles(_geo.indexBuffer);
+			
+//			_geo.deactive();
+//			_mat.deactive();
+//			_shader.deactive();
 		}
 	}
 }
