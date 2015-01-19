@@ -146,5 +146,15 @@ package com.core.geometry
 				_raws[i*8 + 7] = _normals ? _normals[i*3 + 2] : 0;
 			}
 		}
+		
+		public function get vertexes():Vector.<Number>
+		{
+			return _vertexes;
+		}
+		
+		public function get indexes():Vector.<uint>
+		{
+			return _indexes;
+		}
 	}
 }

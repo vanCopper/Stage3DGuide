@@ -1,5 +1,6 @@
 package
 {
+	import com.Stage3DProxy;
 	import com.View3D;
 	import com.core.entities.MeshNode;
 	import com.core.geometry.PlaneGeometry;
@@ -13,13 +14,12 @@ package
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
-	import flash.geom.Vector3D;
 	import flash.ui.Keyboard;
 
 	[SWF(width='800',height='600',backgroundColor='0x333333',frameRate="60")]
 	public class Stage3DGuide extends Sprite
 	{
-		[Embed(source="../assets/floor_diffuse.jpg")]
+		[Embed(source="../assets/bkg.jpg")]
 		private static var TextureClass:Class;
 		
 		private var _view3d:View3D;
@@ -36,6 +36,14 @@ package
 			this.stage.align = StageAlign.TOP_LEFT;
 			this.stage.addEventListener(Event.RESIZE, onResize);
 			this.stage.addEventListener(KeyboardEvent.KEY_DOWN, onkeyDown);
+			
+		}
+		
+		private function onEnter(e:Event):void
+		{
+			_view3d.configBackBuffer();
+			Stage3DProxy.instance.context3d.clear();
+			_view3d.render();
 		}
 		
 		private var _gl:Number = 15;
@@ -79,10 +87,11 @@ package
 			var mat:TextureMaterial = new TextureMaterial();
 			mat.bitmapData = (new TextureClass() as Bitmap).bitmapData;
 			
-			var meshNode:MeshNode = new MeshNode(pGeo, mat, new DefaultShader);
+			var meshNode:MeshNode = new MeshNode(pGeo, mat, new DefaultShader());
 //			meshNode.z = 15;
 			
 			_view3d.scene3D.addChild(meshNode);
+			this.stage.addEventListener(Event.ENTER_FRAME, onEnter);
 		}
 		
 		private function onResize(e:Event):void

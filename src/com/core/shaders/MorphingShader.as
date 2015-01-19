@@ -1,5 +1,10 @@
 package com.core.shaders
 {
+	/**
+	 * 
+	 * @author vancopper
+	 * 
+	 */	
 	public class MorphingShader extends ShaderBase
 	{
 		public function MorphingShader()

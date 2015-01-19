@@ -88,6 +88,7 @@ package
 			_view3d.scene3D.addChild(_meshNode);
 			
 			this.stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			
 		}
 		
 		private function onResize(e:Event):void
