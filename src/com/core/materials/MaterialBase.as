@@ -25,9 +25,7 @@ package com.core.materials
 		public function active():void
 		{
 			//TODO:
-			
 			Stage3DProxy.instance.context3d.setTextureAt(0, texture);
-						
 		}
 		
 		public function deactive():void
@@ -36,7 +34,7 @@ package com.core.materials
 			Stage3DProxy.instance.context3d.setTextureAt(0, null);
 		}
 		
-		private function get texture():Texture
+		protected function get texture():Texture
 		{
 			if(!_texture || _preContext3D != Stage3DProxy.instance.context3d)
 			{
@@ -46,8 +44,6 @@ package com.core.materials
 			_preContext3D = Stage3DProxy.instance.context3d;
 			return _texture;
 		}
-		
-		
 	
 	}
 }

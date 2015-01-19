@@ -2,7 +2,9 @@ package com.core.entities
 {
 	import com.Stage3DProxy;
 	import com.core.geometry.GeometryBase;
+	import com.core.materials.DefaultMaterial;
 	import com.core.materials.MaterialBase;
+	import com.core.shaders.DefaultShader;
 	import com.core.shaders.ShaderBase;
 	
 	import flash.display.Stage;
@@ -22,8 +24,8 @@ package com.core.entities
 		{
 			//TODO: 添加默认材质&shader
 			_geo = geo;
-			_mat = mat;
-			_shader = shader;
+			_mat = mat ? mat : new DefaultMaterial();
+			_shader = shader ? shader : new DefaultShader();
 			super();
 		}
 		
