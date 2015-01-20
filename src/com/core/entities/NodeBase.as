@@ -1,5 +1,8 @@
 package com.core.entities
 {
+	import com.Camera3D;
+	import com.copper3d;
+	
 	import flash.geom.Matrix3D;
 	import flash.geom.Vector3D;
 
@@ -35,6 +38,13 @@ package com.core.entities
 			_transformComponents[0] = _pos;
 			_transformComponents[1] = _rot;
 			_transformComponents[2] = _sca;
+		}
+		
+		/**
+		 * @private
+		 */
+		copper3d function collectDraws(camera:Camera3D/*, lights:Vector.<Light3D>, lightsLength:int, useShadow:Boolean*/):void 
+		{
 		}
 		
 		public function render():void
