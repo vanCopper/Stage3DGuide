@@ -8,6 +8,7 @@ package
 	import com.debug.Stats;
 	import com.effects.postprocessing.ColorEffect;
 	import com.effects.postprocessing.GrayscaleEffect;
+	import com.effects.postprocessing.WaveEffect;
 	
 	import flash.display.Bitmap;
 	import flash.display.Sprite;
@@ -17,6 +18,7 @@ package
 	import flash.events.KeyboardEvent;
 	import flash.text.TextField;
 	import flash.ui.Keyboard;
+	import flash.utils.getTimer;
 	
 	[SWF(width='600',height='450',backgroundColor='0x333333',frameRate="60")]
 	
@@ -29,6 +31,7 @@ package
 		private var _mesh:MeshNode;
 		private var _colorEffect:ColorEffect = new ColorEffect();
 		private var _grayscaleEffect:GrayscaleEffect = new GrayscaleEffect(); 
+		private var _waveEffect:WaveEffect = new WaveEffect();
 		private var _info:TextField;
 		
 		public function PostEffectTest()
@@ -60,6 +63,10 @@ package
 				case Keyboard.NUMBER_3:
 					_view3d.postEffect = _grayscaleEffect;
 					_info.text = "GrayscaleEffect";
+					break;
+				case Keyboard.NUMBER_4:
+					_view3d.postEffect = _waveEffect;
+					_info.text = "WaveEffect";
 					break;
 			}
 		}
@@ -97,7 +104,7 @@ package
 		private function onEnterFrame(e:Event):void
 		{
 //			_view3d.camera3D.rotaion(1, "Y");
-			_mesh.rotationY += 1;
+//			_mesh.rotationY += 1;
 			_view3d.configBackBuffer();
 			Stage3DProxy.instance.context3d.clear(/*255, 255, 255*/);
 			_view3d.render();
