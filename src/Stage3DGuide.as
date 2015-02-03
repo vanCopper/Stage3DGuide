@@ -4,8 +4,10 @@ package
 	import com.View3D;
 	import com.core.entities.MeshNode;
 	import com.core.geometry.PlaneGeometry;
+	import com.core.materials.ColorMaterial;
 	import com.core.materials.TextureMaterial;
 	import com.core.shaders.DefaultShader;
+	import com.core.shaders.DepthMapShader;
 	import com.debug.Stats;
 	
 	import flash.display.Bitmap;
@@ -52,19 +54,22 @@ package
 			switch(e.keyCode)
 			{
 				case Keyboard.X:
-					_view3d.camera3D.rotaion(_gl, "x");
+//					_view3d.camera3D.moveRight(2);
 					break;
 				case Keyboard.Y:
-					_view3d.camera3D.rotaion(_gl, "y");
+//					_view3d.camera3D.rotaion(_gl, "y");
+//					_view3d.c
 					break;
 				case Keyboard.Z:
-					_view3d.camera3D.rotaion(_gl, "z");
+//					_view3d.camera3D.rotaion(_gl, "z");
 					break;
 				case Keyboard.W:
-					_view3d.camera3D.distance -= 1;
+//					_view3d.camera3D.distance -= 1;
+//					_view3d.camera3D.moveUp(1);
 					break;
 				case Keyboard.S:
-					_view3d.camera3D.distance += 1;
+//					_view3d.camera3D.distance += 1;
+//					_view3d.camera3D.moveDown(1);
 					break;
 			}
 			
@@ -84,13 +89,19 @@ package
 		private function initObject():void
 		{
 			var pGeo:PlaneGeometry = new PlaneGeometry(10,10);
-			var mat:TextureMaterial = new TextureMaterial();
-			mat.bitmapData = (new TextureClass() as Bitmap).bitmapData;
-			
-			var meshNode:MeshNode = new MeshNode(pGeo, mat, new DefaultShader());
-//			meshNode.z = 15;
-			
+			var mat:ColorMaterial = new ColorMaterial(0xff0000);
+//			var mat:TextureMaterial = new TextureMaterial();
+//			mat.bitmapData = (new TextureClass() as Bitmap).bitmapData;
+			var depthMapShader:DepthMapShader = new DepthMapShader();
+
+			var meshNode:MeshNode = new MeshNode(pGeo, mat, depthMapShader);
+			meshNode.z = 10;
 			_view3d.scene3D.addChild(meshNode);
+			
+//			var mesh:MeshNode = new MeshNode(pGeo, mat, depthMapShader);
+//			mesh.z = 15;
+//			mesh.x = 20;
+//			_view3d.scene3D.addChild(mesh);
 			this.stage.addEventListener(Event.ENTER_FRAME, onEnter);
 		}
 		

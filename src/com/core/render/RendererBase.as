@@ -1,5 +1,7 @@
 package com.core.render
 {
+	import com.core.entities.NodeBase;
+
 	/**
 	 * 渲染器 
 	 * @author vancopper
@@ -9,6 +11,11 @@ package com.core.render
 	{
 		public function RendererBase()
 		{
+		}
+		
+		public function render(rootNode:NodeBase):void
+		{
+			//Override
 		}
 	}
 }

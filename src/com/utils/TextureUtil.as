@@ -12,6 +12,8 @@ package com.utils
 	 */	
 	public class TextureUtil
 	{
+		private static const MAX_SIZE:uint = 2048;
+		
 		public function TextureUtil()
 		{
 		}
@@ -37,6 +39,21 @@ package com.utils
 			var texture:Texture = context3d.createTexture(width, height, Context3DTextureFormat.BGRA, false);
 			texture.uploadFromBitmapData(bitmapData, miplevel);
 			return texture;
+		}
+		
+		public static function getBestPowerOf2(value):uint
+		{
+			trace(value);
+			var p:uint = 1;
+			
+			while (p < value)
+				p <<= 1;
+			
+			if (p > MAX_SIZE)
+				p = MAX_SIZE;
+			
+			trace(p);
+			return p;
 		}
 	}
 }

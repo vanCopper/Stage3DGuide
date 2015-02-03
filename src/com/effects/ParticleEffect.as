@@ -4,10 +4,6 @@ package com.effects
 	import com.core.utils.BoundBox;
 	
 	import flash.geom.Vector3D;
-	
-	import alternativa.engine3d.alternativa3d;
-	import alternativa.engine3d.core.Transform3D;
-	import alternativa.engine3d.effects.ParticleSystem;
 
 	use namespace copper3d
 	/**

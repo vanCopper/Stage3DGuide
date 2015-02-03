@@ -75,13 +75,13 @@ package com.core.geometry
 				_vertexBuffer = Stage3DProxy.instance.context3d.createVertexBuffer(_raws.length / 8, 8);
 				
 				_vertexBuffer.uploadFromVector(_raws, 0, _raws.length / 8);
-				//va0 顶点
-				Stage3DProxy.instance.context3d.setVertexBufferAt(0, _vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
-				//va1 uv
-				Stage3DProxy.instance.context3d.setVertexBufferAt(1, _vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_2);
-				//va2 法线
-				Stage3DProxy.instance.context3d.setVertexBufferAt(2, _vertexBuffer, 5, Context3DVertexBufferFormat.FLOAT_3);
 			}
+			//va0 顶点
+			Stage3DProxy.instance.context3d.setVertexBufferAt(0, _vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
+			//va1 uv
+			Stage3DProxy.instance.context3d.setVertexBufferAt(1, _vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_2);
+			//va2 法线
+			Stage3DProxy.instance.context3d.setVertexBufferAt(2, _vertexBuffer, 5, Context3DVertexBufferFormat.FLOAT_3);
 			
 			if(!_indexBuffer || _preContext3D != Stage3DProxy.instance.context3d)
 			{

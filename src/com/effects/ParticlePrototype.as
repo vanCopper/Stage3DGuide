@@ -1,12 +1,11 @@
 package com.effects
 {
+	import com.copper3d;
+	import com.core.utils.Transform3D;
+	
 	import flash.geom.Vector3D;
 	
-	import alternativa.engine3d.core.Transform3D;
-	import alternativa.engine3d.effects.Particle;
-	import alternativa.engine3d.effects.ParticleEffect;
-	
-
+	use namespace copper3d
 	/**
 	 * 
 	 * @author vancopper

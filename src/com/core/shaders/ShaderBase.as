@@ -21,6 +21,11 @@ package com.core.shaders
 		{
 		}
 		
+		protected function uploadProgram3DConstants():void
+		{
+			//Override
+		}
+		
 		public function active():void
 		{
 			if(!_program3d || _preContext3D != Stage3DProxy.instance.context3d)
@@ -40,6 +45,8 @@ package com.core.shaders
 			}
 			_preContext3D = Stage3DProxy.instance.context3d;
 			Stage3DProxy.instance.context3d.setProgram( _program3d );
+			
+			uploadProgram3DConstants();
 		}
 		
 		public function deactive():void

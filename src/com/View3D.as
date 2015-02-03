@@ -1,11 +1,14 @@
 package com
 {
+	import com.effects.postprocessing.PostEffectShaderBase;
+	
 	import flash.display.Sprite;
 	import flash.display.Stage3D;
 	import flash.display3D.Context3DProfile;
 	import flash.display3D.Context3DRenderMode;
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
+
 	/**
 	 * 
 	 * @author vancopper
@@ -23,7 +26,10 @@ package com
 		private var _y:Number = 0;
 		private var _needUpdateBackBuffer:Boolean = true;
 		private var _needUpdatePostion:Boolean = true;
-		
+		/**
+		 * deferredShading 效果
+		 */		
+		public var postEffect:PostEffectShaderBase;
 		
 		public function View3D(camera3d:Camera3D = null, scene3d:Scene3D = null, context3DProfile:String = Context3DProfile.STANDARD)
 		{
@@ -110,11 +116,16 @@ package com
 		
 		public function render():void
 		{
-			
 			//暂时用scene3d.nodes来代替rootNode 实际上应该是筛选过的一个rendNode列表
 			Stage3DProxy.instance.vm = camera3D.viewMatrix
 			Stage3DProxy.instance.pm = camera3D.projectionMatrix;
-			Stage3DProxy.instance.render(scene3D);
+			if(postEffect)
+			{
+				Stage3DProxy.instance.deferredRender(scene3D, postEffect);
+			}else
+			{
+				Stage3DProxy.instance.render(scene3D);
+			}
 			Stage3DProxy.instance.context3d.present();
 			
 		}
@@ -140,6 +151,7 @@ package com
 			{
 				_width = value;
 				_needUpdateBackBuffer = true;
+				Stage3DProxy.instance.viewWidth = _width;
 			}
 		}
 		
@@ -191,6 +203,7 @@ package com
 			{
 				_height = value;
 				_needUpdateBackBuffer = true;
+				Stage3DProxy.instance.viewHeight = _height;
 			}
 		}
 		

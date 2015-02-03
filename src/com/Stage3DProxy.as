@@ -1,10 +1,17 @@
 package com
 {
 	import com.core.entities.NodeBase;
+	import com.core.render.DefaultRenderer;
+	import com.core.render.PostProcessingRenderer;
+	import com.core.render.RendererBase;
+	import com.effects.postprocessing.PostEffectShaderBase;
+	import com.utils.TextureUtil;
 	
 	import flash.display.Stage3D;
 	import flash.display3D.Context3D;
 	import flash.display3D.Context3DProgramType;
+	import flash.display3D.Context3DTextureFormat;
+	import flash.display3D.textures.Texture;
 	import flash.geom.Matrix;
 	import flash.geom.Matrix3D;
 
@@ -25,6 +32,14 @@ package com
 		private var _vm:Matrix3D;
 		private var _pm:Matrix3D;
 		
+		private var _viewWidth:Number;
+		private var _viewHeight:Number;
+		
+		private var _defaultRenderer:RendererBase;
+		private var _postProcessingRenderer:PostProcessingRenderer;
+		
+		public var postEffect:PostEffectShaderBase;
+		
 		public function Stage3DProxy()
 		{
 			if(_instance == null)
@@ -36,30 +51,32 @@ package com
 			}
 		}
 		
-		public function init(stage3d:Stage3D, profile:String):void
+		public function init(stage3d:Stage3D, profile:String, defaultRenderer:RendererBase = null, postProcessingRenderer:PostProcessingRenderer = null):void
 		{
 			//TODO:
 			_stage3d = stage3d;
 			_context3d = stage3d.context3D;
 			_context3d.enableErrorChecking = true;
 			_profile = profile;
+			_defaultRenderer = defaultRenderer ? defaultRenderer : new DefaultRenderer();
+			_postProcessingRenderer = postProcessingRenderer ? postProcessingRenderer : new PostProcessingRenderer();
 		}
 		
 		public function render(rootNode:NodeBase):void
 		{
-			//TODO:
+			//TODO: 添加Renderer
+			_context3d.setRenderToBackBuffer();
 			if(!rootNode) return;
-			var nodes:Vector.<NodeBase> = rootNode.nodes;
-			if(!nodes && !nodes.length)return;
-			
-			for(var i:int = 0; i < nodes.length; i++)
-			{
-				var node:NodeBase = nodes[i];
-				node.render();
-			}
+			_defaultRenderer.render(rootNode);
 		}
 		
-
+		public function deferredRender(rootNode:NodeBase, effectShader:PostEffectShaderBase):void
+		{
+			if(!rootNode) return;
+			_postProcessingRenderer.postEffectShader = effectShader;
+			_postProcessingRenderer.render(rootNode);
+		}
+		
 		public function get profile():String
 		{
 			return _profile;
@@ -116,7 +133,7 @@ package com
 		}
 
 		private var _viewM:Matrix3D = new Matrix3D();
-		private function updateM():void
+		public function updateM():void
 		{
 			_viewM.identity();
 			_viewM.append(_wm);
@@ -125,5 +142,27 @@ package com
 			
 			_context3d.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, _viewM, true);
 		}
+
+		public function get viewWidth():Number
+		{
+			return _viewWidth;
+		}
+
+		public function set viewWidth(value:Number):void
+		{
+			_viewWidth = value;
+		}
+
+		public function get viewHeight():Number
+		{
+			return _viewHeight;
+		}
+
+		public function set viewHeight(value:Number):void
+		{
+			_viewHeight = value;
+		}
+
+
 	}
 }

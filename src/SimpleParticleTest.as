@@ -3,9 +3,9 @@ package
 	import com.Stage3DProxy;
 	import com.View3D;
 	import com.core.entities.MeshNode;
-	import com.core.geometry.PlaneGeometry;
-	import com.core.materials.DefaultMaterial;
+	import com.core.geometry.CubeGeometry;
 	import com.core.materials.ColorMaterial;
+	import com.core.materials.DefaultMaterial;
 	import com.core.shaders.DefaultShader;
 	import com.debug.Stats;
 	
@@ -44,17 +44,35 @@ package
 			initObject();
 		}
 		
+//		private var _mesh:MeshNode;
 		private function initObject():void
 		{
-			var loop:uint = 100;
-			while(loop--)
-			{
-				var meshNode:MeshNode = new MeshNode(new PlaneGeometry(1, 1), new ColorMaterial(), new DefaultShader());
-				meshNode.x = 10 * (Math.random() - Math.random());
-				meshNode.y = 10 * (Math.random() - Math.random());
-				meshNode.z = Math.random() * 10;
-				_view3d.scene3D.addChild(meshNode);
-			}
+//			var limit:int = 30;
+//			var vertices:Vector.<Number> = new Vector.<Number>();
+//			var indices:Vector.<uint> = new Vector.<uint>();
+//			for (var i:int = 0; i < limit; i++) 
+//			{
+//				vertices.push(0,0,0, 0,0,i*4, 0,1,0, 0,1,i*4, 1,1,0, 1,1,i*4, 1,0,0, 1,0,i*4);
+//				indices.push(i*4, i*4 + 1, i*4 + 3, i*4 + 2, i*4 + 3, i*4 + 1);
+//			}
+//			
+//			var geo:GeometryBase = new GeometryBase();
+//			geo.updateVertexData(vertices);
+//			geo.updateIndexData(indices);
+//			
+//			var meshNode:MeshNode = new MeshNode(geo);
+//			_view3d.scene3D.addChild(meshNode);
+			
+//			var loop:uint = 100;
+//			while(loop--)
+//			{
+//			_mesh = new MeshNode(new CubeGeometry(2, 2, 2), new DefaultMaterial(), new DefaultShader());
+//			meshNode.x = 10 * (Math.random() - Math.random());
+//			meshNode.y = 10 * (Math.random() - Math.random());
+//			meshNode.z = Math.random() * 10;
+//			_mesh.rotationX = 30;
+//			_view3d.scene3D.addChild(_mesh);
+//			}
 			this.stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		}
 		
@@ -62,6 +80,7 @@ package
 		{
 			_view3d.configBackBuffer();
 			Stage3DProxy.instance.context3d.clear();
+//			_mesh.rotationY += 1;
 			_view3d.render();
 		}
 		

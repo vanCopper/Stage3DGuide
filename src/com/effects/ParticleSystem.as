@@ -9,9 +9,12 @@
 package com.effects {
 
 	import com.Camera3D;
+	import com.Stage3DProxy;
 	import com.copper3d;
 	import com.core.entities.NodeBase;
+	import com.core.utils.Procedure;
 	
+	import flash.display.Stage;
 	import flash.display3D.Context3D;
 	import flash.display3D.Context3DBlendFactor;
 	import flash.display3D.Context3DProgramType;
@@ -58,7 +61,7 @@ package com.effects {
          */
 		copper3d var effectList:ParticleEffect;
 		
-		private var drawUnit:DrawUnit = null;
+		private var drawUnit:NodeBase = null;
 		private var diffuse:TextureBase = null;
 		private var opacity:TextureBase = null;
 		private var blendSource:String = null;
@@ -114,7 +117,8 @@ package com.effects {
 			return effect;
 		}
 		
-		public function getEffectByName(name:String):ParticleEffect {
+		public function getEffectByName(name:String):ParticleEffect 
+		{
 			for (var effect:ParticleEffect = effectList; effect != null; effect = effect.nextInSystem) {
 				if (effect.name == name) return effect;
 			}
@@ -123,7 +127,8 @@ package com.effects {
         /**
          * @private
          */
-		copper3d function getTime():Number {
+		copper3d function getTime():Number 
+		{
 			return pause ? (stopTime - subtractiveTime) : (getTimer()*0.001 - subtractiveTime);
 		}
         /**
@@ -132,15 +137,15 @@ package com.effects {
 		override copper3d function collectDraws(camera:Camera3D/*, lights:Vector.<Light3D>, lightsLength:int, useShadow:Boolean*/):void
 		{
 			// Create geometry and program
-			if (vertexBuffer == null) createAndUpload(camera.context3D);
+			if (vertexBuffer == null) createAndUpload(Stage3DProxy.instance.context3d);
 			// Average size
-			scale = Math.sqrt(localToCameraTransform.a*localToCameraTransform.a + localToCameraTransform.e*localToCameraTransform.e + localToCameraTransform.i*localToCameraTransform.i);
-			scale += Math.sqrt(localToCameraTransform.b*localToCameraTransform.b + localToCameraTransform.f*localToCameraTransform.f + localToCameraTransform.j*localToCameraTransform.j);
-			scale += Math.sqrt(localToCameraTransform.c*localToCameraTransform.c + localToCameraTransform.g*localToCameraTransform.g + localToCameraTransform.k*localToCameraTransform.k);
-			scale /= 3;
+//			scale = Math.sqrt(localToCameraTransform.a*localToCameraTransform.a + localToCameraTransform.e*localToCameraTransform.e + localToCameraTransform.i*localToCameraTransform.i);
+//			scale += Math.sqrt(localToCameraTransform.b*localToCameraTransform.b + localToCameraTransform.f*localToCameraTransform.f + localToCameraTransform.j*localToCameraTransform.j);
+//			scale += Math.sqrt(localToCameraTransform.c*localToCameraTransform.c + localToCameraTransform.g*localToCameraTransform.g + localToCameraTransform.k*localToCameraTransform.k);
+//			scale /= 3;
 			// TODO: add rotation on slope of the Z-axis in local space of camera
 			// Calculate frustrum
-			camera.calculateFrustum(cameraToLocalTransform);
+//			camera.calculateFrustum(cameraToLocalTransform);
 			// Loop items
 			var visibleEffectList:ParticleEffect;
 			var conflictAnyway:Boolean = false;
@@ -153,7 +158,7 @@ package com.effects {
 					var culling:int = 63;
 					if (effect.boundBox != null) {
 						effect.calculateAABB();
-						culling = effect.aabb.checkFrustumCulling(camera.frustum, 63);
+						culling = 1 //effect.aabb.checkFrustumCulling(camera.frustum, 63);
 					}
 					if (culling >= 0) {
 						// Gather the particles
@@ -220,7 +225,8 @@ package com.effects {
 		private function createAndUpload(context:Context3D):void {
 			var vertices:Vector.<Number> = new Vector.<Number>();
 			var indices:Vector.<uint> = new Vector.<uint>();
-			for (var i:int = 0; i < limit; i++) {
+			for (var i:int = 0; i < limit; i++) 
+			{
 				vertices.push(0,0,0, 0,0,i*4, 0,1,0, 0,1,i*4, 1,1,0, 1,1,i*4, 1,0,0, 1,0,i*4);
 				indices.push(i*4, i*4 + 1, i*4 + 3, i*4 + 2, i*4 + 3, i*4 + 1);
 			}
@@ -345,7 +351,8 @@ package com.effects {
 			return proc.getByteCode(mode);
 		}
 		
-		private function flush(camera:Camera3D):void {
+		private function flush(camera:Camera3D):void 
+		{
 			if (fakeCounter == fake.length) fake[fakeCounter] = new NodeBase();
 			var object:NodeBase = fake[fakeCounter];
 			fakeCounter++;
@@ -376,7 +383,8 @@ package com.effects {
 			camera.renderer.addDrawUnit(drawUnit, Renderer.TRANSPARENT_SORT);
 		}
 		
-		private function drawParticleList(camera:Camera3D, list:Particle):void {
+		private function drawParticleList(camera:Camera3D, list:Particle):void
+		{
 			// Sorting
  			if (list.next != null) list = sortParticleList(list);
 			// Gather draws
@@ -407,7 +415,8 @@ package com.effects {
 			Particle.collector = list;
 		}
 		
-		private function sortParticleList(list:Particle):Particle {
+		private function sortParticleList(list:Particle):Particle 
+		{
 			var left:Particle = list;
 			var right:Particle = list.next;
 			while (right != null && right.next != null) {
@@ -464,7 +473,8 @@ package com.effects {
 			return null;
 		}
 		
-		private function drawConflictEffects(camera:Camera3D, effectList:ParticleEffect):void {
+		private function drawConflictEffects(camera:Camera3D, effectList:ParticleEffect):void 
+		{
 			var particleList:Particle;
 			for (var effect:ParticleEffect = effectList; effect != null; effect = next) {
 				var next:ParticleEffect = effect.next;

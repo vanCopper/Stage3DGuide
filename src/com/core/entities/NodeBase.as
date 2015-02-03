@@ -2,6 +2,7 @@ package com.core.entities
 {
 	import com.Camera3D;
 	import com.copper3d;
+	import com.core.utils.Transform3D;
 	
 	import flash.geom.Matrix3D;
 	import flash.geom.Vector3D;
@@ -32,6 +33,11 @@ package com.core.entities
 		private var _scaleY:int = 1;
 		private var _scaleZ:int = 1;
 		
+		/**
+		 * @private
+		 */
+		copper3d var localToCameraTransform:Transform3D = new Transform3D();
+		
 		public function NodeBase()
 		{
 			_transformComponents = new Vector.<Vector3D>(3, true);
@@ -46,7 +52,7 @@ package com.core.entities
 		copper3d function collectDraws(camera:Camera3D/*, lights:Vector.<Light3D>, lightsLength:int, useShadow:Boolean*/):void 
 		{
 		}
-		
+
 		public function render():void
 		{
 			//TODO:

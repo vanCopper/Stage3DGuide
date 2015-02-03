@@ -64,7 +64,7 @@ package
 		{
 //			_meshNode.rotationY += 1;
 //			_angle += 1;
-			_view3d.camera3D.rotaion(_angle, "y");
+//			_view3d.camera3D.rotaion(_angle, "y");
 			
 			_view3d.configBackBuffer();
 			Stage3DProxy.instance.context3d.clear();
@@ -84,7 +84,7 @@ package
 			addChild(new Stats());
 			
 			_view3d = new View3D();
-			_view3d.camera3D.distance = 3;
+//			_view3d.camera3D.distance = 3;
 			this.stage.addChild(_view3d);
 			onResize(null);
 			

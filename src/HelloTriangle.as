@@ -57,7 +57,7 @@ package
 		private function render(event:Event):void
 		{
 			var modelMatrix:Matrix3D = new Matrix3D();
-			modelMatrix.appendTranslation(0, 1, 0);
+//			modelMatrix.appendTranslation(0, 1, 0);
 			//			_modelMatrix.position = new Vector3D(1, 0, 0);
 			//			_modelMatrix.appendRotation(t*1.0, Vector3D.Z_AXIS);
 			_context3d.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, modelMatrix)
