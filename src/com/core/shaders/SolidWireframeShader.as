@@ -1,5 +1,9 @@
 package com.core.shaders
 {
+	import com.Stage3DProxy;
+	
+	import flash.display3D.Context3DProgramType;
+
 	/**
 	 * 
 	 * @author vancopper
@@ -12,6 +16,14 @@ package com.core.shaders
 			super();
 		}
 		
+		override protected function uploadProgram3DConstants():void
+		{
+			// fc0, LINE_COLOR;
+			// fc1.x, THICKNESS;
+			// fc1.y, 1
+			Stage3DProxy.instance.context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, Vector.<Number>([ 1, 1, 1, 1 ]));
+			Stage3DProxy.instance.context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 1, Vector.<Number>([ 0.005, 1, 0, 0 ]));
+		}
 		override public function get vertexSrc():String
 		{
 			var str:String = 

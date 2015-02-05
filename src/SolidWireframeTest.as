@@ -4,10 +4,7 @@ package
 	import com.View3D;
 	import com.core.entities.MeshNode;
 	import com.core.geometry.GeometryBase;
-	import com.core.geometry.PlaneGeometry;
-	import com.core.geometry.SphereGeometry;
 	import com.core.materials.TextureMaterial;
-	import com.core.shaders.DefaultShader;
 	import com.core.shaders.SolidWireframeShader;
 	import com.debug.Stats;
 	import com.parser.OBJParser;
@@ -16,8 +13,6 @@ package
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
-	import flash.display3D.Context3D;
-	import flash.display3D.Context3DProgramType;
 	import flash.display3D.Context3DVertexBufferFormat;
 	import flash.display3D.VertexBuffer3D;
 	import flash.events.Event;
@@ -43,11 +38,6 @@ package
 		
 		public function SolidWireframeTest()
 		{
-//			var v0:Vector3D = new Vector3D(0, 0, 0);
-//			var v1:Vector3D = new Vector3D(1, 0, 0);
-//			var v2:Vector3D = new Vector3D(0, 1, 0);
-//			trace(Math.sqrt(2)/2);
-//			trace(vertexEdgeDistance(v0, v1, v2));
 			addEventListener(Event.ADDED_TO_STAGE, addToStage);
 		}
 		
@@ -62,20 +52,9 @@ package
 		private var _angle:int = 1;
 		private function onEnterFrame(e:Event):void
 		{
-//			_meshNode.rotationY += 1;
+			_meshNode.rotationY += 1;
 //			_angle += 1;
 //			_view3d.camera3D.rotaion(_angle, "y");
-			
-			_view3d.configBackBuffer();
-			Stage3DProxy.instance.context3d.clear();
-			// fc0, LINE_COLOR;
-			// fc1.x, THICKNESS;
-			// fc1.y, 1
-			Stage3DProxy.instance.context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, Vector.<Number>([ 1, 1, 1, 1 ]));
-			Stage3DProxy.instance.context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 1, Vector.<Number>([ 0.005, 1, 0, 0 ]));
-//			Stage3DProxy.instance.context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 1, Vector.<Number>([ 1, -2, 2, 2 ]));
-//			Stage3DProxy.instance.context3d.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 2, Vector.<Number>([ 0, 0.009, 0, 0 ]));
-			
 			_view3d.render();
 		}
 		
@@ -84,7 +63,7 @@ package
 			addChild(new Stats());
 			
 			_view3d = new View3D();
-//			_view3d.camera3D.distance = 3;
+			_view3d.camera3D.distance = 3;
 			this.stage.addChild(_view3d);
 			onResize(null);
 			

@@ -2,8 +2,6 @@ package com.parser
 {
 	import flash.utils.ByteArray;
 	
-	import away3d.core.base.data.UV;
-	
 	/**
 	 * OBJ文件解析器
 	 * @author vanCopper

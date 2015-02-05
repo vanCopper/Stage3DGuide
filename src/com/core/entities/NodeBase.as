@@ -46,6 +46,11 @@ package com.core.entities
 			_transformComponents[2] = _sca;
 		}
 		
+		protected function uploadProgram3DConstants():void
+		{
+			//Override
+		}
+		
 		/**
 		 * @private
 		 */
