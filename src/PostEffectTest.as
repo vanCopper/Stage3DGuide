@@ -108,6 +108,7 @@ package
 			_view3d.configBackBuffer();
 			Stage3DProxy.instance.context3d.clear(/*255, 255, 255*/);
 			_view3d.render();
+//			_view3d
 		}
 		
 		private function onResize(e:Event):void

@@ -13,3 +13,7 @@ bin-debug/LightTest.swf
 bin-debug/Stage3DGuide.swf
 
 bin-debug/TextureTest.swf
+
+.actionScriptProperties
+
+*.swf
